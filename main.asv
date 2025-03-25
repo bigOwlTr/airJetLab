@@ -1,9 +1,9 @@
 clear; close all; clc;
 
 dataCentreline = readtable("airJetLab.xlsx", 'Range', 'A1:J4');
-dataX60 = readtable("airJetLab.xlsx", 'Range', 'A1:J4');
-dataX180 = readtable("airJetLab.xlsx", 'Range', 'A1:J4');
-dataX300 = readtable("airJetLab.xlsx", 'Range', 'A1:J4');
+dataX60 = readtable("airJetLab.xlsx", 'Range', 'A14:D29');
+dataX180 = readtable("airJetLab.xlsx", 'Range', 'F14:I35');
+dataX300 = readtable("airJetLab.xlsx", 'Range', 'K14:N39');
 
 manometerAngle = 12.9;
 manometerOffset = 11;
@@ -16,20 +16,30 @@ Q_E = (nozzleDiameter/2)^2*V_E;
 M_E = 0.5*(V_E^2)*(Q_E*1.225);
 
 %-------------------analysis 2---------------------------------------------
+% Create figure with explicit figure handle
+fig1 = figure('Units','centimeters','Position',[3, 3, 16, 10], ...
+    'Name','Analysis 2');
+plot(dataCentreline{1,2:10},dataCentreline{4,2:10},'b:','LineWidth',1.5 ...
+    ,'Color','k','LineStyle', '-');
 
-plot(dataCentreline{1,2:10},dataCentreline{4,2:10},'b:','LineWidth',1.5);
-
-xlabel('T_2 (N)', 'FontSize', 12);
-ylabel('T_1 (N)', 'FontSize', 12);
-h_legend = legend('Location', 'northwest');
-set(h_legend, 'FontSize', 10);
+xlabel('Distance from Nozzle (mm)', 'FontSize', 12);
+ylabel('Velocity (m/s)', 'FontSize', 12);
 grid on;
-
 set(gca, 'FontSize', 12, 'LineWidth', 1.5);
+hold off;
 
 %-------------------analysis 3---------------------------------------------
+% Create a second figure with a different name
+fig2 = figure('Units', 'centimeters', 'Position', [3, 3, 16, 10], 'Name', 'Analysis 3');
+plot(dataX60{1:14, "R"}, dataX60{1:14, "V"}, 'LineWidth', 1.5, 'Color', 'k', 'LineStyle', '-');
 
-
+xlim([-60, 60]);  
+ylim([0, 20]);   
+xlabel('Vertical Distance from Nozzle Centreline (mm)', 'FontSize', 12);
+ylabel('Velocity (m/s)', 'FontSize', 12);
+grid on;
+set(gca, 'FontSize', 12, 'LineWidth', 1.5);
+hold off;
 
 %-------------------analysis 4---------------------------------------------
 
