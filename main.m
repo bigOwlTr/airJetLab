@@ -5,14 +5,12 @@ dataX60 = readtable("airJetLab.xlsx", 'Range', 'A14:D29');
 dataX180 = readtable("airJetLab.xlsx", 'Range', 'F14:I35');
 dataX300 = readtable("airJetLab.xlsx", 'Range', 'K14:N39');
 
-manometerAngle = 12.9;
-manometerOffset = 11;
 nozzleDiameter = 0.03;
 
 %-------------------analysis 1---------------------------------------------
 
 V_E = dataCentreline{4,2};
-Q_E = (nozzleDiameter/2)^2*V_E;
+Q_E = (nozzleDiameter/2)^2*pi*V_E;
 M_E = 0.5*(V_E^2)*(Q_E*1.225);
 
 disp(V_E)
@@ -119,9 +117,64 @@ grid on;
 set(gca, 'FontSize', 12, 'LineWidth', 1.5);
 hold off;
 
-%-------------------analysis 5---------------------------------------------
+%-------------------analysis 5&6-------------------------------------------
+
+Q_X60 = 0;
+Q_X180 = 0;
+Q_X300 = 0;
+M_X60 = 0;
+M_X180 = 0;
+M_X300 = 0;
 
 
+for i=3:14
+    V_R = dataX60{i,"V"};
+    R = dataX60{i,"R"};
+    higherR = (R+2)/1000;
+    lowerR = (R-2)/1000;
+    if i~=8
+        halfAnnulusArea = abs(higherR^2-lowerR^2)*pi/2;
+    elseif i == 8
+        halfAnnulusArea = higherR^2*pi;
+    end
+        
+    halfAnnulusVolumeFlow = halfAnnulusArea*V_R;
+    halfAnnulusMomentumFlux = 1.225*halfAnnulusVolumeFlow*0.5*V_R^2;
+    M_X60 = M_X60+halfAnnulusMomentumFlux;
+    Q_X60 = Q_X60+halfAnnulusVolumeFlow;
+end
 
-%-------------------analysis 6---------------------------------------------
+for i=5:18
+    V_R = dataX180{i,"V"};
+    R = dataX180{i,"R"};
+    higherR = (R+2)/1000;
+    lowerR = (R-2)/1000;
+    if i~=11
+        halfAnnulusArea = abs(higherR^2-lowerR^2)*pi/2;
+    elseif i == 11
+        halfAnnulusArea = higherR^2*pi;
+    end
+    halfAnnulusVolumeFlow = halfAnnulusArea*V_R;
+    halfAnnulusMomentumFlux = 1.225*halfAnnulusVolumeFlow*0.5*V_R^2;
+    M_X180 = M_X180+halfAnnulusMomentumFlux;
+    Q_X180 = Q_X180+halfAnnulusVolumeFlow;
+end
+
+for i=6:24
+    V_R = dataX300{i,"V"};
+    R = dataX300{i,"R"};
+    higherR = (R+2)/1000;
+    lowerR = (R-2)/1000;
+     if i~=13
+        halfAnnulusArea = abs(higherR^2-lowerR^2)*pi/2;
+    elseif i == 13
+        halfAnnulusArea = higherR^2*pi;
+    end
+    halfAnnulusVolumeFlow = halfAnnulusArea*V_R;
+    halfAnnulusMomentumFlux = 1.225*halfAnnulusVolumeFlow*0.5*V_R^2;
+    M_X300 = M_X300+halfAnnulusMomentumFlux;
+    Q_X300 = Q_X300+halfAnnulusVolumeFlow;
+end
+
+
 
