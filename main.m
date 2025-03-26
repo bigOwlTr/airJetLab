@@ -11,7 +11,7 @@ nozzleDiameter = 0.03;
 
 V_E = dataCentreline{4,2};
 Q_E = (nozzleDiameter/2)^2*pi*V_E;
-M_E = 0.5*(V_E^2)*(Q_E*1.225);
+M_E =V_E*Q_E*1.225;
 
 disp(V_E)
 disp(Q_E)
@@ -23,8 +23,8 @@ figure('Units','centimeters','Position',[3, 3, 16, 10], ...
 plot(dataCentreline{1,2:10},dataCentreline{4,2:10},'b:','LineWidth',1.5 ...
     ,'Color','k','LineStyle','-');
 
-xlabel('Distance from Nozzle (mm)', 'FontSize', 12);
-ylabel('Velocity (m/s)', 'FontSize', 12);
+xlabel('Distance from Nozzle (mm)', 'FontSize', 12, 'Interpreter','latex');
+ylabel('Velocity (m/s)', 'FontSize', 12, 'Interpreter','latex');
 grid on;
 set(gca, 'FontSize', 12, 'LineWidth', 1.5);
 
@@ -36,9 +36,9 @@ hold on
 plot([-2.1, 2.1],[1, 1],'b','LineWidth',1.5,'LineStyle','--');
 xlim([-2.1, 2.1]);  
 ylim([0, 1.1]);   
-xlabel('Radial Position (r/D)', 'FontSize', 12);
-ylabel('Normalised Velocity (V/V_E)', 'FontSize', 12);
-legend('Velocity Profile', 'Exit Velocity', 'Location', 'northeast', 'FontSize', 12);
+xlabel('Radial Position ($r/D$)', 'FontSize', 12, 'Interpreter','latex');
+ylabel('Normalised Velocity ($V/V_E$)', 'FontSize', 12, 'Interpreter','latex');
+legend('Velocity Profile', 'Exit Velocity', 'Location', 'northeast', 'FontSize', 12, 'Interpreter','latex');
 grid on;
 set(gca, 'FontSize', 12, 'LineWidth', 1.5);
 hold off
@@ -51,9 +51,9 @@ hold on
 plot([-2.1, 2.1],[1, 1],'b','LineWidth',1.5,'LineStyle','--');
 xlim([-2.1, 2.1]);  
 ylim([0, 1.1]);   
-ylabel('Normalised Velocity (V/V_E)', 'FontSize', 12);
-xlabel('Radial Position (r/D)', 'FontSize', 12);
-legend('Velocity Profile', 'Exit Velocity', 'Location', 'northeast', 'FontSize', 12);
+ylabel('Normalised Velocity ($V/V_E$)', 'FontSize', 12, 'Interpreter','latex');
+xlabel('Radial Position ($r/D$)', 'FontSize', 12, 'Interpreter','latex');
+legend('Velocity Profile', 'Exit Velocity', 'Location', 'northeast', 'FontSize', 12, 'Interpreter','latex');
 grid on;
 set(gca, 'FontSize', 12, 'LineWidth', 1.5);
 hold off
@@ -66,9 +66,9 @@ hold on
 plot([-2.1, 2.1],[1, 1],'b','LineWidth',1.5,'LineStyle','--');
 xlim([-2.1, 2.1]);  
 ylim([0, 1.1]);   
-ylabel('Normalised Velocity (V/V_E)', 'FontSize', 12);
-xlabel('Radial Position (r/D)', 'FontSize', 12);
-legend('Velocity Profile', 'Exit Velocity', 'Location', 'northeast', 'FontSize', 12);
+ylabel('Normalised Velocity ($V/V_E$)', 'FontSize', 12, 'Interpreter','latex');
+xlabel('Radial Position ($r/D$)', 'FontSize', 12, 'Interpreter','latex');
+legend('Velocity Profile', 'Exit Velocity', 'Location', 'northeast', 'FontSize', 12, 'Interpreter','latex');
 grid on;
 set(gca, 'FontSize', 12, 'LineWidth', 1.5);
 hold off
@@ -87,7 +87,6 @@ disp(lowerDivergenceLM);
 figure('Units', 'centimeters', 'Position', [3, 3, 16, 10], 'Name', '5.4');
 hold on;
 
-% Plot the black crosses as edge data points
 h1 = plot(divergenceUpper.X/30, divergenceUpper.Y/30, 'kx','LineWidth',1.25);
 plot(DivergenceLower.X/30, DivergenceLower.Y/30, 'kx','LineWidth',1.25);
 
@@ -108,11 +107,11 @@ lower_prediction = predict(lowerDivergenceLM, X_extrapolate);
 h3 = plot(X_extrapolate/30, upper_prediction/30, 'k', 'LineWidth', 1.5,'LineStyle','--');
 plot(X_extrapolate/30, lower_prediction/30, 'k', 'LineWidth', 1.5,'LineStyle','--');
 
-legend([h1, h3, h4], {'Edge Data Points','Jet Edge Linear Model', 'Jet Core (approximate)'}, 'Location', 'northwest');
+legend([h1, h3, h4], {'Edge Data Points','Jet Edge Linear Model', 'Jet Core (approximate)'}, 'Location', 'northwest', 'Interpreter','latex');
 
 ylim([-2,2])
-xlabel('Axial Distance (r/D)', 'FontSize', 12);
-ylabel('Radial Position (r/D)', 'FontSize', 12);
+xlabel('Axial Distance ($x/D$)', 'FontSize', 12, 'Interpreter','latex');
+ylabel('Radial Position ($r/D$)', 'FontSize', 12, 'Interpreter','latex');
 grid on;
 set(gca, 'FontSize', 12, 'LineWidth', 1.5);
 hold off;
@@ -139,7 +138,7 @@ for i=3:14
     end
         
     halfAnnulusVolumeFlow = halfAnnulusArea*V_R;
-    halfAnnulusMomentumFlux = 1.225*halfAnnulusVolumeFlow*0.5*V_R^2;
+    halfAnnulusMomentumFlux = halfAnnulusVolumeFlow*V_R*1.225;
     M_X60 = M_X60+halfAnnulusMomentumFlux;
     Q_X60 = Q_X60+halfAnnulusVolumeFlow;
 end
@@ -147,15 +146,15 @@ end
 for i=5:18
     V_R = dataX180{i,"V"};
     R = dataX180{i,"R"};
-    higherR = (R+2)/1000;
-    lowerR = (R-2)/1000;
+    higherR = (R+2.5)/1000;
+    lowerR = (R-2.5)/1000;
     if i~=11
         halfAnnulusArea = abs(higherR^2-lowerR^2)*pi/2;
     elseif i == 11
         halfAnnulusArea = higherR^2*pi;
     end
     halfAnnulusVolumeFlow = halfAnnulusArea*V_R;
-    halfAnnulusMomentumFlux = 1.225*halfAnnulusVolumeFlow*0.5*V_R^2;
+    halfAnnulusMomentumFlux = halfAnnulusVolumeFlow*V_R*1.225;
     M_X180 = M_X180+halfAnnulusMomentumFlux;
     Q_X180 = Q_X180+halfAnnulusVolumeFlow;
 end
@@ -163,18 +162,43 @@ end
 for i=6:24
     V_R = dataX300{i,"V"};
     R = dataX300{i,"R"};
-    higherR = (R+2)/1000;
-    lowerR = (R-2)/1000;
+    higherR = (R+2.5)/1000;
+    lowerR = (R-2.5)/1000;
      if i~=13
         halfAnnulusArea = abs(higherR^2-lowerR^2)*pi/2;
     elseif i == 13
         halfAnnulusArea = higherR^2*pi;
     end
     halfAnnulusVolumeFlow = halfAnnulusArea*V_R;
-    halfAnnulusMomentumFlux = 1.225*halfAnnulusVolumeFlow*0.5*V_R^2;
+    halfAnnulusMomentumFlux = halfAnnulusVolumeFlow*V_R*1.225;
     M_X300 = M_X300+halfAnnulusMomentumFlux;
     Q_X300 = Q_X300+halfAnnulusVolumeFlow;
 end
 
+xD_values = [0, 60, 180, 300];
+
+Q_values = [Q_E, Q_X60, Q_X180, Q_X300];
+M_values = [M_E, M_X60, M_X180, M_X300];
+
+figure('Units', 'centimeters', 'Position', [3, 3, 7, 10]);
+hold on;
+scatter(xD_values/30, Q_values/Q_E, 80, 'b', 'filled'); 
+xlabel('Axial distance ($x/D$)', 'FontSize', 12, 'Interpreter','latex');
+ylabel('Normalised Volumetric Flow Rate ($\dot{Q}/\dot{Q_E}$)', 'FontSize', 12, 'Interpreter','latex');
+grid on;
+set(gca, 'FontSize', 12, 'LineWidth', 1.5);
+ylim([0,2.5])
+
+hold off;
+
+figure('Units', 'centimeters', 'Position', [3, 3, 7, 10]);
+hold on;
+scatter(xD_values/30, M_values/M_E, 80, 'r', 'filled');
+xlabel('Axial distance ($x/D$)', 'FontSize', 12, 'Interpreter','latex');
+ylabel('Normalised Momentum Flux ($\dot{M}/\dot{M_E}$)', 'FontSize', 12, 'Interpreter','latex');
+grid on;
+ylim([0,1.1])  
+set(gca, 'FontSize', 12, 'LineWidth', 1.5);
+hold off;
 
 
